@@ -1,0 +1,17 @@
+{
+  "name": "expenses-control-backend",
+  "version": "1.0.0",
+  "description": "Aplicación para control de gastos, permite acceder mediante un login y registro de nuevos usuarios",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@daviidku",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.9"
+  }
+}
