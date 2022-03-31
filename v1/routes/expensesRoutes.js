@@ -5,8 +5,8 @@ const { protect } = require("../../middleware/protectMiddleware");
 
 router
   .route("/")
-  .get(protect, controller.getExpenses)
-  .post(protect, controller.createExpense);
+  .post(protect, controller.createExpense)
+  .get(protect, controller.readExpenses);
 
 router.route("/:id").delete(protect, controller.deleteExpense);
 

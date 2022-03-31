@@ -1,11 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const expenses = require("../models/expensesModels");
 
-const getExpenses = asyncHandler(async (req, res) => {
-  const userExpenses = await expenses.find({ user: req.user.id });
-  res.status(200).json(userExpenses);
-});
-
 const createExpense = asyncHandler(async (req, res) => {
   if (!req.body.concept) {
     res.status(400);
@@ -13,12 +8,12 @@ const createExpense = asyncHandler(async (req, res) => {
   }
 
   if (!req.body.amount) {
-    req.status(400);
+    res.status(400);
     throw new Error("Necesito un importe.");
   }
 
   if (req.body.amount === 0) {
-    req.status(400);
+    res.status(400);
     throw new Error("El importe no puede ser 0.");
   }
 
@@ -32,11 +27,31 @@ const createExpense = asyncHandler(async (req, res) => {
   res.status(200).json(newExpenses);
 });
 
+const readExpenses = asyncHandler(async (req, res) => {
+  const userExpenses = await expenses.find({ user: req.user.id });
+  res.status(200).json(userExpenses);
+});
+
 const deleteExpense = asyncHandler(async (req, res) => {
-  // TODO funcionar para eliminar registro.
+  const searchExpense = await expenses.findById(req.params.id);
+
+  if (!searchExpense) {
+    res.status(400);
+    throw new Error("No encontre la tarea solicitada");
+  }
+
+  if (searchExpense.user.toString() !== req.user.id) {
+    res.status(400);
+    throw new Error("Acceso no autorizado");
+  }
+
+  searchExpense.remove();
+
+  res.status(200).json({ id: req.params.id });
 });
 
 module.exports = {
-  getExpenses,
   createExpense,
+  readExpenses,
+  deleteExpense,
 };
